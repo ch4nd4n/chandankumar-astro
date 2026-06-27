@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="About — Chandan Kumar" current="about">
+  <article class="about">
+    <header class="about-header">
+      <h1 class="about-hello">Hello, world.</h1>
+    </header>
+
+    <div class="about-body">
+      <section class="about-section">
+        <div class="section-num">№ 01</div>
+        <div class="section-content">
+          <h2>Who</h2>
+          <p>
+            If it isn't obvious; Name Chandan Kumar. Age is inconsistent, albeit consistently been
+            (more or less) in Bangalore.
+          </p>
+          <p>
+            I work as a Software Engineer. ex-Liftoff, ex-Coreobjects.
+            I blog about software, photographs and tutorials.
+          </p>
+          <p>
+            IMO Optimizing application performance is exciting, tiring and painfully tiring, sometimes.
+          </p>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <div class="section-num">№ 02</div>
+        <div class="section-content">
+          <h2>Site</h2>
+          <p>
+            Powered by Astro. I was confused between NextJs and Gatsby, but chose Gatsby — then rebuilt this
+            in Astro because it made more sense for a static blog.
+          </p>
+          <p>
+            <del>I would like to make this PWA but thats for another time.</del> PWA is an ongoing process
+            and I hope to keep adding something or the other over a period of time.
+          </p>
+          <p>Copyleft. WTH</p>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <div class="section-num">№ 03</div>
+        <div class="section-content">
+          <h2>Find me</h2>
+          <ul>
+            <li><a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener">Twitter — @ch4nd4n</a></li>
+            <li><a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener">Instagram — @ch4nd4n</a></li>
+            <li><a href="https://github.com/ch4nd4n" target="_blank" rel="noopener">GitHub — ch4nd4n</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-bottom: var(--space-24);
+  }
+  .about-header {
+    border-top: 3px solid var(--text-primary);
+    padding-top: var(--space-8);
+    margin-bottom: var(--space-12);
+  }
+  .about-hello {
+    font-size: clamp(2.5rem, 8vw, var(--text-3xl));
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--accent);
+  }
+  .about-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    max-width: var(--measure-prose);
+    margin-left: 0;
+  }
+  .about-section {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--space-8);
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-6);
+  }
+  .section-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    padding-top: 4px;
+  }
+  .section-content h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.02em;
+  }
+  .section-content p {
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-base);
+  }
+  .section-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .section-content li {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+  }
+  @media (max-width: 640px) {
+    .about-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

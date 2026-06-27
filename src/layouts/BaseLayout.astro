@@ -1,0 +1,54 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: string;
+  showWordmark?: boolean;
+}
+
+const { title, description, current, showWordmark = true } = Astro.props;
+const metaDesc = description ?? 'Personal blog by Chandan Kumar. Software, photography, tutorials.';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={metaDesc} />
+  <title>{title}</title>
+  <link rel="icon" href="/favicon.svg" />
+  <script is:inline>
+    // Prevent theme flash — apply before paint
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = stored ?? (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-wrap">
+    <Nav current={current} showWordmark={showWordmark} />
+    <main class="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</body>
+</html>
+
+<style>
+  .page-wrap {
+    max-width: var(--measure-archive);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
+  .main-content {
+    padding-top: var(--space-12);
+  }
+</style>

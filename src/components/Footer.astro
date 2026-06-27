@@ -1,0 +1,51 @@
+---
+---
+<footer>
+  <div class="footer-inner">
+    <div style="color: var(--accent); font-weight: 700;">Copyleft. WTH</div>
+    <div>Powered by Astro</div>
+    <div class="footer-links">
+      <a href="/rss.xml">RSS</a>
+      <a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: var(--space-24);
+    border-top: 3px solid var(--text-primary);
+  }
+  .footer-inner {
+    max-width: var(--measure-archive);
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-6) var(--space-12);
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    gap: var(--space-8);
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .footer-links {
+    display: flex;
+    gap: var(--space-4);
+  }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

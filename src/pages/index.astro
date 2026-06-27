@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostRow from '../components/PostRow.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
+---
+<BaseLayout title="Chandan Kumar" current="home" showWordmark={false}>
+  <section class="hero">
+    <h1 class="hero-name">
+      Chandan<br /><span style="color: var(--accent);">Kumar</span>
+    </h1>
+    <p class="hero-bio">
+      <span style="color: var(--accent); font-weight: 700;">Yo!</span> Personal blog by Chandan Kumar.<br />
+      I blog about software, photographs and tutorials. ex-Liftoff, ex-Coreobjects
+    </p>
+    <div class="hero-social">
+      <a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://github.com/ch4nd4n" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+
+  <section class="latest">
+    <div class="section-label">Latest Posts</div>
+    {posts.map((post, i) => (
+      <PostRow
+        title={post.data.title}
+        date={post.data.date}
+        excerpt={post.data.excerpt}
+        tags={post.data.tags}
+        slug={post.id}
+        index={i}
+        total={posts.length}
+        isLast={i === posts.length - 1}
+      />
+    ))}
+    <div class="read-all">
+      <a href="/blog">Read all posts</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-16) 0 var(--space-12);
+    max-width: var(--measure-hero);
+  }
+  .hero-name {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    margin-bottom: var(--space-8);
+  }
+  .hero-bio {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 38ch;
+    margin-bottom: var(--space-8);
+  }
+  .hero-social {
+    display: flex;
+    gap: var(--space-6);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-social a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .hero-social a:hover {
+    color: var(--text-primary);
+  }
+  .latest {
+    border-top: 3px solid var(--text-primary);
+    padding-top: var(--space-6);
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+  }
+  .read-all {
+    padding-top: var(--space-8);
+    font-size: var(--text-sm);
+  }
+  @media (max-width: 640px) {
+    .hero-name {
+      font-size: calc(var(--text-3xl) * 0.75);
+    }
+  }
+</style>

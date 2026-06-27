@@ -1,0 +1,125 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  excerpt?: string;
+  tags?: string[];
+  slug: string;
+  index: number;
+  total: number;
+  isLast?: boolean;
+}
+
+const { title, date, excerpt, tags = [], slug, index, total, isLast = false } = Astro.props;
+
+const num = String(index + 1).padStart(2, '0');
+const totalStr = String(total).padStart(2, '0');
+const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<article class:list={['post-row', { 'post-row--last': isLast }]}>
+  <a href={`/blog/${slug}`} class="post-row-link">
+    <div class="post-row-grid">
+      <div class="post-stamp">
+        <div class="post-index">
+          <span class="post-num">{num}</span>
+          <span class="post-total"> / {totalStr}</span>
+        </div>
+        <div class="post-date">{dateStr}</div>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">{title}</h2>
+        {excerpt && <p class="post-excerpt">{excerpt}</p>}
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map((t, i) => (
+              <span>
+                {t}{i < tags.length - 1 ? '  ·  ' : ''}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .post-row {
+    border-bottom: 1px solid var(--border);
+  }
+  .post-row--last {
+    border-bottom: none;
+  }
+  .post-row-link {
+    display: block;
+    padding: 28px 0;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .post-row-link:hover .post-title {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+  }
+  .post-row-grid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-8);
+    align-items: baseline;
+  }
+  .post-stamp {
+    /* left column */
+  }
+  .post-index {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-feature-settings: "tnum";
+  }
+  .post-num {
+    color: var(--accent);
+  }
+  .post-total {
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .post-date {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-feature-settings: "tnum";
+  }
+  .post-title {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .post-excerpt {
+    margin: 10px 0 14px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    max-width: 44rem;
+  }
+  .post-tags {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  @media (max-width: 640px) {
+    .post-row-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+    .post-title {
+      font-size: 22px;
+    }
+  }
+</style>

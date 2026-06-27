@@ -1,0 +1,68 @@
+---
+import Wordmark from './Wordmark.astro';
+import { ThemeToggle } from './ThemeToggle';
+
+interface Props {
+  current?: string;
+  showWordmark?: boolean;
+}
+const { current, showWordmark = true } = Astro.props;
+
+const navLink = (href: string, label: string, id: string) => ({
+  href,
+  label,
+  active: current === id,
+});
+
+const links = [
+  navLink('/blog', 'Blog', 'blog'),
+  navLink('/about', 'About', 'about'),
+];
+---
+<header style="border-top: 3px solid var(--text-primary); border-bottom: 1px solid var(--border);">
+  <div class="nav-inner">
+    <div class="nav-wordmark">
+      {showWordmark && <Wordmark />}
+    </div>
+    <nav class="nav-links">
+      {links.map(l => (
+        <a
+          href={l.href}
+          style={`text-decoration: ${l.active ? 'underline' : 'none'}; text-decoration-thickness: 2px; text-underline-offset: 0.25em; color: var(--text-primary); font-size: 14px; font-weight: 500;`}
+        >
+          {l.label}
+        </a>
+      ))}
+      <span style="width: 1px; height: 16px; background: var(--border); display: inline-block; align-self: center;"></span>
+      <a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener" style="color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none;">Twitter</a>
+      <a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener" style="color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none;">Instagram</a>
+      <ThemeToggle client:load />
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav-inner {
+    max-width: var(--measure-archive);
+    margin: 0 auto;
+    padding: 18px var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    min-height: 56px;
+  }
+  .nav-wordmark {
+    min-height: 22px;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  @media (max-width: 640px) {
+    .nav-links {
+      gap: 16px;
+    }
+  }
+</style>

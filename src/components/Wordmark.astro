@@ -1,0 +1,12 @@
+---
+interface Props {
+  href?: string;
+}
+const { href = '/' } = Astro.props;
+---
+<a
+  href={href}
+  style="text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: var(--text-sm); letter-spacing: -0.01em; line-height: 1.2;"
+>
+  Chandan <span style="color: var(--accent);">Kumar</span>
+</a>
