@@ -1,54 +1,68 @@
 ---
+/**
+ * BaseLayout.astro — site shell.
+ * Import once per page. Provides: <head>, Nav, Footer, site-wrap.
+ * Font import handled here via @fontsource-variable/inter.
+ */
+import '@fontsource-variable/inter';
+import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
-  current?: string;
-  showWordmark?: boolean;
+  ogImage?: string;
 }
 
-const { title, description, current, showWordmark = true } = Astro.props;
-const metaDesc = description ?? 'Personal blog by Chandan Kumar. Software, photography, tutorials.';
+const {
+  title = 'Chandan Kumar',
+  description = 'Personal blog by Chandan Kumar. Software, photographs, tutorials.',
+  ogImage,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const siteTitle = title === 'Chandan Kumar'
+  ? 'Chandan Kumar'
+  : `${title} — Chandan Kumar`;
 ---
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content={metaDesc} />
-  <title>{title}</title>
+  <title>{siteTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
   <link rel="icon" href="/favicon.svg" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content={siteTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content={canonical} />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <!-- RSS autodiscovery -->
+  <link rel="alternate" type="application/rss+xml" title="Chandan Kumar" href="/rss.xml" />
+
+  <!-- Prevent flash of wrong theme -->
   <script is:inline>
-    // Prevent theme flash — apply before paint
     (function() {
-      const stored = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = stored ?? (prefersDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      var saved = localStorage.getItem('ck-theme');
+      var pref  = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved || pref);
     })();
   </script>
 </head>
 <body>
-  <div class="page-wrap">
-    <Nav current={current} showWordmark={showWordmark} />
-    <main class="main-content">
+  <div class="site-wrap">
+    <Nav current={Astro.url.pathname} />
+    <main>
       <slot />
     </main>
     <Footer />
   </div>
 </body>
 </html>
-
-<style>
-  .page-wrap {
-    max-width: var(--measure-archive);
-    margin: 0 auto;
-    padding: 0 var(--space-6);
-  }
-  .main-content {
-    padding-top: var(--space-12);
-  }
-</style>

@@ -1,49 +1,73 @@
 ---
+/**
+ * Footer.astro — C1 site footer.
+ * Thick top rule. Three columns: copyleft · powered-by · social icon links.
+ */
 ---
-<footer>
-  <div class="footer-inner">
-    <div style="color: var(--accent); font-weight: 700;">Copyleft. WTH</div>
-    <div>Powered by Astro</div>
-    <div class="footer-links">
-      <a href="/rss.xml">RSS</a>
-      <a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener">Twitter</a>
-      <a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener">Instagram</a>
-    </div>
-  </div>
+
+<footer class="footer">
+  <span class="copyleft">Copyleft. WTH</span>
+  <span class="powered">Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a></span>
+  <nav class="socials" aria-label="Social links">
+    <a href="/rss.xml"                        aria-label="RSS feed">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      RSS
+    </a>
+    <a href="https://twitter.com/ch4nd4n"     aria-label="Twitter" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      Twitter
+    </a>
+    <a href="https://instagram.com/ch4nd4n"   aria-label="Instagram" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+      Instagram
+    </a>
+    <a href="https://github.com/ch4nd4n"      aria-label="GitHub" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.5-4-2-6-2m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+      GitHub
+    </a>
+  </nav>
 </footer>
 
 <style>
-  footer {
+  .footer {
     margin-top: var(--space-24);
+    padding: 22px 0 40px;
     border-top: 3px solid var(--text-primary);
-  }
-  .footer-inner {
-    max-width: var(--measure-archive);
-    margin: 0 auto;
-    padding: var(--space-6) var(--space-6) var(--space-12);
     display: grid;
     grid-template-columns: 160px 1fr auto;
     gap: var(--space-8);
     align-items: baseline;
     font-size: 12px;
     color: var(--text-muted);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 500;
   }
-  .footer-links {
+
+  .copyleft { color: var(--accent); font-weight: 700; }
+
+  .powered a { color: inherit; }
+
+  .socials {
     display: flex;
     gap: var(--space-4);
+    align-items: center;
   }
-  .footer-links a {
+
+  .socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--text-muted);
     text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    transition: color var(--duration-fast) var(--easing-standard);
   }
-  .footer-links a:hover {
-    text-decoration: underline;
-  }
+  .socials a:hover { color: var(--text-primary); }
+
   @media (max-width: 640px) {
-    .footer-inner {
+    .footer {
       grid-template-columns: 1fr;
       gap: var(--space-4);
     }

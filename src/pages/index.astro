@@ -1,102 +1,219 @@
 ---
+/**
+ * index.astro — home page.
+ * C1 layout: hero (big name + bio + social rail) + 3 latest posts.
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostRow from '../components/PostRow.astro';
+import PostList from '../components/PostList.astro';
+import Icon from '../components/Icon.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const posts = allPosts
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 5);
----
-<BaseLayout title="Chandan Kumar" current="home" showWordmark={false}>
-  <section class="hero">
-    <h1 class="hero-name">
-      Chandan<br /><span style="color: var(--accent);">Kumar</span>
-    </h1>
-    <p class="hero-bio">
-      <span style="color: var(--accent); font-weight: 700;">Yo!</span> Personal blog by Chandan Kumar.<br />
-      I blog about software, photographs and tutorials. ex-Liftoff, ex-Coreobjects
-    </p>
-    <div class="hero-social">
-      <a href="https://twitter.com/ch4nd4n" target="_blank" rel="noopener">Twitter</a>
-      <a href="https://www.instagram.com/ch4nd4n/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://github.com/ch4nd4n" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </section>
+const sorted   = allPosts.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 
-  <section class="latest">
-    <div class="section-label">Latest Posts</div>
-    {posts.map((post, i) => (
-      <PostRow
-        title={post.data.title}
-        date={post.data.date}
-        excerpt={post.data.excerpt}
-        tags={post.data.tags}
-        slug={post.id}
-        index={i}
-        total={posts.length}
-        isLast={i === posts.length - 1}
-      />
-    ))}
-    <div class="read-all">
-      <a href="/blog">Read all posts</a>
-    </div>
-  </section>
+const SOCIAL = [
+  { name: 'x',         label: 'Twitter',   href: 'https://twitter.com/ch4nd4n'   },
+  { name: 'instagram', label: 'Instagram',  href: 'https://instagram.com/ch4nd4n' },
+  { name: 'github',    label: 'GitHub',     href: 'https://github.com/ch4nd4n'    },
+  { name: 'rss',       label: 'RSS',        href: '/rss.xml'                      },
+];
+---
+
+<BaseLayout>
+  <main>
+    <!-- ── Hero ────────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="eyebrow">
+          <Icon name="dot" size={9} class="eyebrow-dot" />
+          <span>№ 01 — HOME</span>
+        </div>
+        <div class="meta-stack">
+          <span>Personal blog</span>
+          <span>Bangalore · 12.97°N</span>
+          <span>Est. 2014</span>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-n">{sorted.length}</div>
+            <div class="stat-l">Posts</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">10y</div>
+            <div class="stat-l">Writing</div>
+          </div>
+        </div>
+        <div class="now">
+          <span class="now-dot">● Now</span>
+          <span>Java · NodeJS</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <h1 class="name">
+          Chandan<br /><span class="name-accent">Kumar</span>
+        </h1>
+        <p class="bio">
+          <span class="yo">Yo!</span> Personal blog by Chandan Kumar.
+          I write about software, photographs and tutorials.
+          ex-Liftoff, ex-Coreobjects.
+        </p>
+        <nav class="social-rail" aria-label="Social links">
+          {SOCIAL.map(s => (
+            <a href={s.href} class="social-link" target={s.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+              <Icon name={s.name} size={16} stroke={1.6} />
+              <span>{s.label}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+    </section>
+
+    <!-- ── Latest posts ─────────────────────────────────────────────── -->
+    <PostList
+      posts={sorted}
+      heading="Latest writing"
+      sectionNumber="02"
+      limit={3}
+      showAllLink
+    />
+  </main>
 </BaseLayout>
 
 <style>
   .hero {
-    padding: var(--space-16) 0 var(--space-12);
-    max-width: var(--measure-hero);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-8);
+    align-items: start;
+    padding: var(--space-12) 0 var(--space-8);
+    min-height: 380px;
   }
-  .hero-name {
-    font-size: var(--text-3xl);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 0.9;
-    margin-bottom: var(--space-8);
-  }
-  .hero-bio {
-    font-size: var(--text-base);
-    color: var(--text-muted);
-    line-height: var(--leading-relaxed);
-    max-width: 38ch;
-    margin-bottom: var(--space-8);
-  }
-  .hero-social {
+
+  /* ── Left rail ── */
+  .hero-left {
     display: flex;
+    flex-direction: column;
     gap: var(--space-6);
+    padding-top: 14px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  :global(.eyebrow-dot) { color: var(--accent); }
+
+  .meta-stack {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.7;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stats {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .stat-n {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-feature-settings: "tnum";
+  }
+  .stat-l {
+    margin-top: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .now {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .now-dot { color: var(--accent); font-weight: 700; font-size: 10px; }
+
+  /* ── Right ── */
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .name {
+    font-size: clamp(64px, 11vw, 144px);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .name-accent { color: var(--accent); }
+
+  .bio {
+    margin: var(--space-8) 0;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--text-primary);
+    max-width: 32rem;
+    letter-spacing: -0.01em;
+  }
+  .yo { color: var(--accent); font-weight: 600; }
+
+  .social-rail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-  }
-  .hero-social a {
     color: var(--text-muted);
     text-decoration: none;
+    transition: color var(--duration-fast) var(--easing-standard);
   }
-  .hero-social a:hover {
-    color: var(--text-primary);
-  }
-  .latest {
-    border-top: 3px solid var(--text-primary);
-    padding-top: var(--space-6);
-  }
-  .section-label {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: var(--space-4);
-  }
-  .read-all {
-    padding-top: var(--space-8);
-    font-size: var(--text-sm);
-  }
+  .social-link:hover { color: var(--text-primary); }
+
+  /* ── Mobile ── */
   @media (max-width: 640px) {
-    .hero-name {
-      font-size: calc(var(--text-3xl) * 0.75);
-    }
+    .hero { grid-template-columns: 1fr; min-height: unset; padding: var(--space-8) 0; }
+    .hero-left { display: none; }
+    .name { font-size: 64px; }
+    .bio  { font-size: 19px; margin: var(--space-6) 0; }
   }
 </style>

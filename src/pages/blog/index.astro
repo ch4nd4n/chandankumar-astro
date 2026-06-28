@@ -1,53 +1,67 @@
 ---
+/**
+ * blog/index.astro — full post archive.
+ * Swiss section header + all posts as PostRows.
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostRow from '../../components/PostRow.astro';
+import PostList from '../../components/PostList.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const sorted   = allPosts.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
-<BaseLayout title="Blog — Chandan Kumar" current="blog">
-  <section class="archive">
-    <div class="archive-header">
-      <h1 class="archive-title">Blog</h1>
-      <div class="archive-count">{posts.length} posts</div>
+
+<BaseLayout title="Blog" description="All writing by Chandan Kumar.">
+  <header class="archive-header">
+    <div class="archive-meta">
+      <div class="archive-num">Archive</div>
+      <div class="archive-count">{sorted.length} entries</div>
     </div>
-    {posts.map((post, i) => (
-      <PostRow
-        title={post.data.title}
-        date={post.data.date}
-        excerpt={post.data.excerpt}
-        tags={post.data.tags}
-        slug={post.id}
-        index={i}
-        total={posts.length}
-        isLast={i === posts.length - 1}
-      />
-    ))}
-  </section>
+    <h1 class="archive-title">Writing</h1>
+  </header>
+
+  <PostList posts={sorted} />
 </BaseLayout>
 
 <style>
-  .archive {
-    border-top: 3px solid var(--text-primary);
-    padding-top: var(--space-6);
-  }
   .archive-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: var(--space-4);
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--space-8);
+    align-items: end;
+    padding: var(--space-16) 0 var(--space-6);
   }
-  .archive-title {
-    font-size: var(--text-lg);
+
+  .archive-meta { padding-bottom: var(--space-2); }
+
+  .archive-num {
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    color: var(--accent);
+    letter-spacing: 0.02em;
   }
   .archive-count {
+    margin-top: 6px;
     font-size: 12px;
     color: var(--text-muted);
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .archive-title {
+    font-size: clamp(56px, 9vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .archive-header { grid-template-columns: 1fr; }
+    .archive-meta   { display: none; }
   }
 </style>

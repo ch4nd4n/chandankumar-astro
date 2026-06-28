@@ -1,23 +1,24 @@
 ---
-import { getCollection, render } from 'astro:content';
+/**
+ * blog/[slug].astro — individual post page.
+ * Generates a route for every entry in src/content/blog/.
+ */
+import { getCollection } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map(post => ({
-    params: { slug: post.id },
-    props: { post },
+    params: { slug: post.slug },
+    props:  { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content } = await post.render();
+const { title, date, tags, excerpt, icon } = post.data;
 ---
-<PostLayout
-  title={post.data.title}
-  date={post.data.date}
-  tags={post.data.tags}
-  excerpt={post.data.excerpt}
->
+
+<PostLayout {title} {date} {tags} {excerpt} {icon}>
   <Content />
 </PostLayout>

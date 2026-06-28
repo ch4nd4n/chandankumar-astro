@@ -1,0 +1,88 @@
+---
+/**
+ * PostList.astro — C1 post list.
+ * Optional Swiss section header (№ XX + label). Composes PostRow.
+ */
+import PostRow from './PostRow.astro';
+
+interface Post {
+  slug: string;
+  data: {
+    title: string;
+    date: string;
+    tags: string[];
+    excerpt: string;
+    icon: string;
+  };
+}
+
+interface Props {
+  posts: Post[];
+  heading?: string;
+  sectionNumber?: string;
+  limit?: number;
+  showAllLink?: boolean;
+}
+
+const {
+  posts,
+  heading,
+  sectionNumber = '02',
+  limit,
+  showAllLink = false,
+} = Astro.props;
+
+const visible = limit ? posts.slice(0, limit) : posts;
+---
+
+<section class="list">
+  {heading && (
+    <header class="list-header">
+      <div class="section-num">№ {sectionNumber}</div>
+      <h3 class="section-label">{heading}</h3>
+      <div class="section-meta">
+        {showAllLink
+          ? <a href="/blog" class="all-link">All posts →</a>
+          : <span>{posts.length} entries</span>
+        }
+      </div>
+    </header>
+  )}
+
+  <div class="rows">
+    {visible.map((post, i) => (
+      <PostRow
+        post={post}
+        index={i}
+        total={posts.length}
+        isLast={i === visible.length - 1}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .list { padding: 32px 0 56px; }
+
+  .list-header {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: var(--space-8);
+    align-items: baseline;
+    padding: 18px 0 14px;
+    border-top: 3px solid var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .section-num   { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
+  .section-label { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-primary); }
+  .section-meta  { font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
+
+  .all-link { color: var(--text-muted); text-decoration: none; }
+  .all-link:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .list-header { grid-template-columns: 1fr auto; }
+    .section-num { display: none; }
+  }
+</style>

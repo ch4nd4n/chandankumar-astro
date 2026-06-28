@@ -1,31 +1,44 @@
-@import "@fontsource-variable/inter";
+/* ─────────────────────────────────────────────────────────────────────────────
+   Chandan Kumar — Global CSS
+   All design tokens + base element styles.
+   Import ONCE in BaseLayout.astro:
+     import '@fontsource-variable/inter';
+     import '../styles/global.css';
+   ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* ── Type families ──────────────────────────────────────────────────────── */
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 
-  --text-xs:   0.800rem;
-  --text-sm:   1.000rem;
-  --text-base: 1.250rem;
-  --text-lg:   1.563rem;
-  --text-xl:   1.953rem;
-  --text-2xl:  2.441rem;
-  --text-3xl:  3.052rem;
-  --text-base-mobile: 1.125rem;
+  /* ── Type scale — Major Third (1.250) ───────────────────────────────────── */
+  --text-xs:   0.800rem;   /* 12.8px — captions, meta, dates */
+  --text-sm:   1.000rem;   /* 16.0px — small labels, inline code */
+  --text-base: 1.250rem;   /* 20.0px — body prose */
+  --text-lg:   1.563rem;   /* 25.0px — H3 / section subheads */
+  --text-xl:   1.953rem;   /* 31.3px — H2 */
+  --text-2xl:  2.441rem;   /* 39.1px — H1 / article titles */
+  --text-3xl:  3.052rem;   /* 48.8px — hero name anchor */
+  --text-base-mobile: 1.125rem; /* 18px — narrow viewports */
 
+  /* ── Weights ────────────────────────────────────────────────────────────── */
   --weight-regular:  400;
   --weight-medium:   500;
   --weight-semibold: 600;
   --weight-bold:     700;
   --weight-black:    800;
 
-  --leading-snug:    1.2;
-  --leading-normal:  1.4;
-  --leading-relaxed: 1.65;
+  /* ── Leading ────────────────────────────────────────────────────────────── */
+  --leading-snug:    1.2;   /* headings */
+  --leading-normal:  1.4;   /* meta, captions */
+  --leading-relaxed: 1.65;  /* body prose */
 
+  /* ── Tracking ───────────────────────────────────────────────────────────── */
   --tracking-tight:  -0.02em;
   --tracking-normal: 0;
 
+  /* ── Colors — light mode "Warm Paper" ───────────────────────────────────── */
   --bg-main:       #F4EFE6;
   --bg-surface:    #EAE3D6;
   --text-primary:  #2D2A26;
@@ -37,6 +50,7 @@
   --success:       #2E7D32;
   --error:         #B23A2E;
 
+  /* ── Spacing scale (4px base) ───────────────────────────────────────────── */
   --space-1:  0.25rem;
   --space-2:  0.5rem;
   --space-3:  0.75rem;
@@ -48,20 +62,26 @@
   --space-24: 6rem;
   --space-32: 8rem;
 
+  /* ── Layout caps ────────────────────────────────────────────────────────── */
   --measure-prose:   65ch;
   --measure-hero:    48rem;
   --measure-archive: 52rem;
 
+  /* ── Radii — zero everywhere ────────────────────────────────────────────── */
   --radius-none: 0;
-  --radius-pill: 9999px;
+  --radius-pill: 9999px; /* reserved for tag chips */
 
+  /* ── Borders ────────────────────────────────────────────────────────────── */
   --border-hairline: 1px;
 
-  --duration-fast:  120ms;
-  --duration-base:  180ms;
+  /* ── Motion ─────────────────────────────────────────────────────────────── */
+  --duration-fast:   120ms;
+  --duration-base:   180ms;
   --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Dark mode — "Deep Tobacco" ─────────────────────────────────────────────── */
+:root.dark,
 [data-theme="dark"] {
   --bg-main:       #1A1816;
   --bg-surface:    #2A2723;
@@ -76,6 +96,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  [data-theme="dark"],
   :root:not([data-theme="light"]) {
     --bg-main:       #1A1816;
     --bg-surface:    #2A2723;
@@ -90,9 +111,11 @@
   }
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+/* ─────────────────────────────────────────────────────────────────────────────
+   Base element styles
+   ───────────────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   font-family: var(--font-sans);
@@ -103,16 +126,12 @@ html {
   text-rendering: optimizeLegibility;
   background: var(--bg-main);
   color: var(--text-primary);
-  transition: background var(--duration-base) var(--easing-standard),
-              color var(--duration-base) var(--easing-standard);
 }
 
 body {
+  margin: 0;
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  letter-spacing: var(--tracking-normal);
-  margin: 0;
-  padding: 0;
 }
 
 h1, h2, h3, h4 {
@@ -123,23 +142,12 @@ h1, h2, h3, h4 {
   margin: 0;
 }
 
-h1 { font-size: var(--text-2xl); }
-h2 { font-size: var(--text-xl); }
-h3 { font-size: var(--text-lg); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-normal); }
-h4 { font-size: var(--text-base); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-normal); }
+h1 { font-size: var(--text-2xl); font-weight: var(--weight-black); }
+h2 { font-size: var(--text-xl);  font-weight: var(--weight-bold); }
+h3 { font-size: var(--text-lg);  font-weight: var(--weight-semibold); letter-spacing: 0; }
+h4 { font-size: var(--text-base); font-weight: var(--weight-semibold); letter-spacing: 0; }
 
-p, li {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  text-wrap: pretty;
-  margin: 0;
-}
-
-small {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  line-height: var(--leading-normal);
-}
+p, li { margin: 0; text-wrap: pretty; }
 
 a {
   color: inherit;
@@ -155,60 +163,69 @@ a:focus-visible {
   border-radius: 0;
 }
 
-code, pre, kbd, samp {
+code, pre, kbd {
   font-family: var(--font-mono);
   font-size: 0.9em;
 }
 
-/* inline code */
-:not(pre) > code {
+code {
   background: var(--bg-surface);
   padding: 0.1em 0.35em;
-  border-radius: var(--radius-none);
 }
 
-/* Shiki code blocks — override its inline bg with our token */
-pre.astro-code,
-pre[class*="language-"] {
-  background: var(--bg-surface) !important;
-  border: var(--border-hairline) solid var(--border);
+pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   padding: var(--space-4) var(--space-6);
   overflow-x: auto;
   font-size: var(--text-sm);
   line-height: 1.55;
-  border-radius: var(--radius-none);
-  margin: 0 0 1.6em;
 }
-pre.astro-code code,
-pre[class*="language-"] code {
-  background: transparent;
-  padding: 0;
-  font-size: inherit;
-}
+
+pre code { background: transparent; padding: 0; }
 
 hr {
   border: 0;
-  border-top: var(--border-hairline) solid var(--border);
+  border-top: 1px solid var(--border);
   margin: var(--space-12) 0;
 }
 
-del {
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
+del { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+::selection { background: var(--accent); color: var(--bg-main); }
+
+/* ── Site layout shell ───────────────────────────────────────────────────── */
+.site-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
 }
 
-::selection {
-  background: var(--accent);
-  color: var(--bg-main);
+/* ── Post prose ─────────────────────────────────────────────────────────── */
+.prose {
+  max-width: var(--measure-prose);
+}
+.prose p,
+.prose li {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+.prose h2 { margin-top: var(--space-12); margin-bottom: var(--space-4); }
+.prose h3 { margin-top: var(--space-8);  margin-bottom: var(--space-3); }
+.prose ul, .prose ol { padding-left: var(--space-6); }
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  margin: var(--space-6) 0;
+  padding-left: var(--space-6);
+  color: var(--text-muted);
+  font-style: italic;
 }
 
-button:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-}
-
+/* ── Mobile retune ──────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  body { font-size: var(--text-base-mobile); }
-  h1 { font-size: calc(var(--text-2xl) * 0.85); }
-  h2 { font-size: calc(var(--text-xl) * 0.9); }
+  body  { font-size: var(--text-base-mobile); }
+  h1    { font-size: calc(var(--text-2xl) * 0.85); }
+  h2    { font-size: calc(var(--text-xl)  * 0.9); }
+  .site-wrap { padding: 0 var(--space-6); }
 }

@@ -1,136 +1,150 @@
 ---
+/**
+ * PostLayout.astro — individual post shell.
+ * Large title in accent, date + tag meta, prose body.
+ */
 import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
 
 interface Props {
   title: string;
-  date: Date;
-  tags?: string[];
-  excerpt?: string;
+  date: string;
+  tags: string[];
+  excerpt: string;
+  icon: string;
 }
 
-const { title, date, tags = [], excerpt } = Astro.props;
-const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const { title, date, tags, excerpt, icon } = Astro.props;
+
+const dateObj   = new Date(date);
+const formatted = dateObj.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
 ---
-<BaseLayout title={`${title} — Chandan Kumar`} description={excerpt} current="blog">
-  <article class="post-article">
+
+<BaseLayout title={title} description={excerpt}>
+  <article class="post">
+    <!-- Back link -->
+    <a href="/blog" class="back">← All posts</a>
+
+    <!-- Header -->
     <header class="post-header">
       <div class="post-meta">
-        <div class="post-meta-num">№ 01</div>
-        <div class="post-meta-date">{dateStr}</div>
-        {tags.length > 0 && (
-          <div class="post-meta-tags">
-            {tags.map(t => <div>{t}</div>)}
-          </div>
-        )}
+        <Icon name={icon} size={13} stroke={1.6} />
+        <span>{formatted}</span>
+        <span>—</span>
+        <span class="tags">{tags.join(' · ')}</span>
       </div>
-      <h1 class="post-headline">{title}</h1>
+      <h1 class="post-title">{title}</h1>
+      <p class="post-excerpt">{excerpt}</p>
+      <div class="rule"></div>
     </header>
 
+    <!-- Body (Markdown renders into .prose) -->
     <div class="prose">
       <slot />
     </div>
 
-    <div class="post-back">
-      <a href="/blog">← All posts</a>
-    </div>
+    <!-- Tag footer -->
+    <footer class="post-footer">
+      <div class="tag-row">
+        {tags.map(tag => (
+          <a href={`/blog?tag=${tag}`} class="tag">{tag}</a>
+        ))}
+      </div>
+      <a href="/blog" class="back-bottom">← Back to archive</a>
+    </footer>
   </article>
 </BaseLayout>
 
 <style>
-  .post-article {
-    padding-bottom: var(--space-24);
+  .back {
+    display: inline-block;
+    margin: var(--space-8) 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
   }
+  .back:hover { color: var(--text-primary); }
+
   .post-header {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: var(--space-8);
-    align-items: start;
-    padding-top: var(--space-6);
-    border-top: 3px solid var(--text-primary);
-    margin-bottom: var(--space-12);
+    padding: var(--space-8) 0 var(--space-6);
+    border-bottom: 1px solid var(--border);
   }
+
   .post-meta {
-    padding-top: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
   }
-  .post-meta-num {
-    font-size: 14px;
-    font-weight: 700;
+
+  .post-title {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
     color: var(--accent);
-    letter-spacing: 0.02em;
-  }
-  .post-meta-date {
-    margin-top: var(--space-2);
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-  .post-meta-tags {
-    margin-top: var(--space-4);
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-weight: 500;
-    line-height: 1.7;
-  }
-  .post-headline {
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    margin: 0 0 var(--space-6);
     max-width: 20ch;
   }
-  .prose {
-    max-width: var(--measure-prose);
-    margin-left: 192px;
-    font-size: 19px;
-    line-height: 1.7;
-  }
-  .prose :global(p) { margin-bottom: 1.4em; }
-  .prose :global(h2) {
-    margin: 1.8em 0 0.6em;
-    font-size: 26px;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border);
-  }
-  .prose :global(h3) {
-    margin: 1.4em 0 0.4em;
-    font-size: 20px;
-  }
-  .prose :global(ul), .prose :global(ol) {
-    margin-bottom: 1.4em;
-    padding-left: var(--space-6);
-  }
-  .prose :global(li) { margin-bottom: 0.4em; }
-  .prose :global(blockquote) {
-    border-left: 3px solid var(--border-strong);
-    margin: 0 0 1.4em;
-    padding: var(--space-2) var(--space-6);
+
+  .post-excerpt {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
     color: var(--text-muted);
-    font-style: italic;
+    max-width: var(--measure-prose);
+    margin: 0;
   }
-  .prose :global(img) {
-    max-width: 100%;
+
+  .rule {
+    height: 1px;
+    background: var(--border);
+    margin-top: var(--space-6);
+  }
+
+  .prose { margin-top: var(--space-8); }
+
+  .post-footer {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 4px 8px;
     border: 1px solid var(--border);
-    display: block;
-    margin-bottom: 1.4em;
   }
-  .post-back {
-    margin-top: var(--space-16);
-    margin-left: 192px;
-    font-size: var(--text-sm);
+  .tag:hover { border-color: var(--border-strong); color: var(--text-primary); }
+
+  .back-bottom {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
   }
-  @media (max-width: 640px) {
-    .post-header {
-      grid-template-columns: 1fr;
-    }
-    .prose {
-      margin-left: 0;
-    }
-    .post-back {
-      margin-left: 0;
-    }
-  }
+  .back-bottom:hover { color: var(--text-primary); }
 </style>
