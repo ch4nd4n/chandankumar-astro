@@ -5,6 +5,7 @@ tags:
   - photography
 ---
 
+![Stink Bug Macro Photo Focus Stacking](/img/stink-bug-focus-stacking-macro.jpg)
 Macro Photo of stink bug, using 2 images to reduce DOF.
 Took this image in 2019 but could not stack it, as I could not find stacking
 app free of cost. One of the cons of Mac!

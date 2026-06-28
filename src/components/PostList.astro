@@ -7,11 +7,13 @@ import PostRow from './PostRow.astro';
 
 interface Post {
   slug: string;
+  body?: string;
   data: {
     title: string;
     date: string;
     tags: string[];
-    excerpt: string;
+    excerpt?: string;
+    description?: string;
     icon: string;
   };
 }
