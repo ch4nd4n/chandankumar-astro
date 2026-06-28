@@ -22,6 +22,7 @@ interface Props {
   sectionNumber?: string;
   limit?: number;
   showAllLink?: boolean;
+  showAllButton?: boolean;
 }
 
 const {
@@ -30,6 +31,7 @@ const {
   sectionNumber = '02',
   limit,
   showAllLink = false,
+  showAllButton = false,
 } = Astro.props;
 
 const visible = limit ? posts.slice(0, limit) : posts;
@@ -59,6 +61,12 @@ const visible = limit ? posts.slice(0, limit) : posts;
       />
     ))}
   </div>
+
+  {showAllButton && (
+    <div class="all-cta-wrap">
+      <a href="/blog" class="all-cta">All posts <span aria-hidden="true">→</span></a>
+    </div>
+  )}
 </section>
 
 <style>
@@ -78,8 +86,36 @@ const visible = limit ? posts.slice(0, limit) : posts;
   .section-label { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-primary); }
   .section-meta  { font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
 
-  .all-link { color: var(--text-muted); text-decoration: none; }
-  .all-link:hover { text-decoration: underline; }
+  .all-link {
+    font-size: 12px;
+    color: var(--text-primary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+  }
+
+  .all-cta-wrap {
+    padding: 28px 0 4px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .all-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bg-main);
+    background: var(--text-primary);
+    padding: 12px 24px;
+  }
 
   @media (max-width: 640px) {
     .list-header { grid-template-columns: 1fr auto; }
