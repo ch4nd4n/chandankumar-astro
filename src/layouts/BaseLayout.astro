@@ -13,12 +13,14 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'Chandan Kumar',
   description = 'Personal blog by Chandan Kumar. Software, photographs, tutorials.',
   ogImage,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -36,6 +38,7 @@ const siteTitle = title === 'Chandan Kumar'
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
   <link rel="icon" href="/favicon.svg" />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
 
   <!-- Open Graph -->
   <meta property="og:title"       content={siteTitle} />

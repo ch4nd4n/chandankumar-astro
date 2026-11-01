@@ -1,0 +1,21 @@
+---
+/**
+ * admin.astro — comment moderation panel.
+ * Owner-UID-gated; see src/components/admin/AdminApp.tsx.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdminApp from '../components/admin/AdminApp';
+---
+
+<BaseLayout title="Admin" noindex>
+  <header class="admin-header">
+    <h1>Comment moderation</h1>
+  </header>
+  <AdminApp client:load />
+</BaseLayout>
+
+<style>
+  .admin-header {
+    padding: var(--space-8) 0 var(--space-4);
+  }
+</style>

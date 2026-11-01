@@ -63,6 +63,23 @@ async function getUserProfiles(ids: string[]) {
   }, {});
 }
 
+export async function getAllComments(): Promise<CommentType[]> {
+  const commentsCol = query(collection(db, 'blogComments'), orderBy('timestamp', 'desc'));
+  const commentsSnap = await getDocs(commentsCol);
+  if (commentsSnap.empty) return [];
+
+  const commentList = commentsSnap.docs.map((d) => ({ ...d.data(), id: d.id })) as CommentType[];
+  const profileIds = commentList.map((comment) => comment.authorId);
+  const userMap = await getUserProfiles(profileIds);
+
+  commentList.forEach((value) => {
+    value.authorName = userMap[value.authorId]?.displayName ?? 'Unknown';
+    value.authorPhoto = userMap[value.authorId]?.photoURL ?? null;
+  });
+
+  return commentList;
+}
+
 export async function getComments(slug: string): Promise<CommentType[]> {
   const commentsCol = query(
     collection(db, 'blogComments'),

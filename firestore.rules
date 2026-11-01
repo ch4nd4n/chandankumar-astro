@@ -2,6 +2,12 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // TODO: replace with your Firebase Auth UID (same value as
+    // PUBLIC_ADMIN_UID in .env) before deploying these rules.
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == "REPLACE_WITH_ADMIN_UID";
+    }
+
     match /userProfiles/{userId} {
       allow read: if true;
       allow write: if request.auth != null && request.auth.uid == userId;
@@ -14,7 +20,8 @@ service cloud.firestore {
         && request.resource.data.comment is string
         && request.resource.data.comment.size() > 0
         && request.resource.data.comment.size() < 3000;
-      allow delete: if request.auth != null && resource.data.authorId == request.auth.uid;
+      allow delete: if request.auth != null
+        && (resource.data.authorId == request.auth.uid || isAdmin());
       allow update: if false;
     }
   }
