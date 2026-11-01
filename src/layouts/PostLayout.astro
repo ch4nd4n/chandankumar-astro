@@ -5,6 +5,7 @@
  */
 import BaseLayout from './BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import CommentSection from '../components/comments/CommentSection';
 
 interface Props {
   title: string;
@@ -12,9 +13,10 @@ interface Props {
   tags: string[];
   excerpt: string;
   icon: string;
+  slug: string;
 }
 
-const { title, date, tags, excerpt, icon } = Astro.props;
+const { title, date, tags, excerpt, icon, slug } = Astro.props;
 
 const dateObj   = new Date(date);
 const formatted = dateObj.toLocaleDateString('en-US', {
@@ -44,6 +46,8 @@ const formatted = dateObj.toLocaleDateString('en-US', {
     <div class="prose">
       <slot />
     </div>
+
+    <CommentSection slug={slug} client:load />
 
     <!-- Tag footer -->
     <footer class="post-footer">
