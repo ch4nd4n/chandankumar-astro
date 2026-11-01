@@ -60,6 +60,23 @@ const SOCIAL = [
           I write about software, photographs and tutorials.
           ex-Liftoff, ex-Coreobjects.
         </p>
+
+        <!-- Compact mobile stats row — hero-left's content, re-flowed for small screens -->
+        <div class="mobile-stats" aria-hidden="false">
+          <div class="mobile-stat">
+            <span class="mobile-stat-n">{sorted.length}</span>
+            <span class="mobile-stat-l">Posts</span>
+          </div>
+          <div class="mobile-stat">
+            <span class="mobile-stat-n">10y</span>
+            <span class="mobile-stat-l">Writing</span>
+          </div>
+          <div class="mobile-stat mobile-stat--now">
+            <span class="mobile-stat-n">Now</span>
+            <span class="mobile-stat-l">Java · NodeJS</span>
+          </div>
+        </div>
+
         <nav class="social-rail" aria-label="Social links">
           {SOCIAL.map(s => (
             <a href={s.href} class="social-link" target={s.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
@@ -210,10 +227,51 @@ const SOCIAL = [
   }
   .social-link:hover { color: var(--text-primary); }
 
+  /* ── Mobile compact stats row (hidden by default; shown < 640px) ── */
+  .mobile-stats {
+    display: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-3) 0;
+    margin: var(--space-4) 0;
+    gap: var(--space-4);
+  }
+  .mobile-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: var(--space-4);
+    border-right: 1px solid var(--border);
+  }
+  .mobile-stat:last-child { border-right: none; padding-right: 0; }
+  .mobile-stat-n {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-feature-settings: "tnum";
+  }
+  .mobile-stat--now .mobile-stat-n { color: var(--accent); }
+  .mobile-stat-l {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── Tablet — mid-range breakpoint: tighten the 200px rail before it collapses ── */
+  @media (max-width: 860px) and (min-width: 641px) {
+    .hero { grid-template-columns: 160px 1fr; gap: var(--space-6); }
+    .meta-stack { font-size: 10px; }
+    .name { font-size: clamp(56px, 10vw, 96px); }
+  }
+
   /* ── Mobile ── */
   @media (max-width: 640px) {
     .hero { grid-template-columns: 1fr; min-height: unset; padding: var(--space-8) 0; }
     .hero-left { display: none; }
+    .mobile-stats { display: flex; }
     .name { font-size: 64px; }
     .bio  { font-size: 19px; margin: var(--space-6) 0; }
   }
