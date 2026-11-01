@@ -222,6 +222,29 @@ del { text-decoration: line-through; text-decoration-thickness: 1px; }
   font-style: italic;
 }
 
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--space-6) 0;
+  border: 1px solid var(--border);
+}
+
+.prose figure {
+  margin: var(--space-6) 0;
+}
+
+.prose figure img {
+  margin: 0;
+}
+
+.prose figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
 /* ── Mobile retune ──────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   body  { font-size: var(--text-base-mobile); }

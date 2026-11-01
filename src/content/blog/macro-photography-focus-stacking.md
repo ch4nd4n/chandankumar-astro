@@ -8,6 +8,6 @@ Focus Stacking: It's an image processing technique in which multiple photographs
 
 In case of close-up photography/macro photography, this technique comes in very handy.
 
-[Full size image](/img/2020-04-16-final.jpg)
+![Full size image](./2020-04-16-final.jpg)
 
 Above photograph is a focus stack of 5 different images.
