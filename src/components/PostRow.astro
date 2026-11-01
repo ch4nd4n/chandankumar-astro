@@ -57,6 +57,7 @@ const formatted = dateObj.toLocaleDateString('en-US', {
 ---
 
 <article class:list={['row', { 'row--last': isLast }]}>
+  <a href={href} class="row-hit" aria-hidden="true" tabindex="-1"></a>
   <!-- Left stamp -->
   <div class="stamp">
     <div class="index">
@@ -74,7 +75,6 @@ const formatted = dateObj.toLocaleDateString('en-US', {
   <!-- Body -->
   <div class="body">
     <div class="meta">
-      <Icon name={icon} size={13} stroke={1.6} class="meta-icon" />
       <span>{formatted}</span>
       <span>·</span>
       <span>{readingMinutes} min read</span>
@@ -94,14 +94,35 @@ const formatted = dateObj.toLocaleDateString('en-US', {
 
 <style>
   .row {
+    position: relative;
     display: grid;
     grid-template-columns: 120px 44px 1fr;
     gap: var(--space-8);
-    padding: 22px 0;
+    padding: 22px var(--space-4);
+    margin: 0 calc(var(--space-4) * -1);
     border-bottom: 1px solid var(--border);
     align-items: start;
+    transition: background-color var(--duration-base) var(--easing-standard);
   }
   .row--last { border-bottom: none; }
+
+  .row:hover {
+    background-color: var(--bg-surface);
+  }
+  .row:has(.row-hit:active) {
+    background-color: var(--border);
+  }
+
+  /* Stretched-link pattern: whole row is clickable/hoverable via this
+     invisible overlay, while the visible title keeps its own underline. */
+  .row-hit {
+    position: absolute;
+    inset: 0;
+  }
+  .row-hit:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
 
   .stamp { display: flex; flex-direction: column; gap: 6px; }
 
@@ -133,10 +154,8 @@ const formatted = dateObj.toLocaleDateString('en-US', {
     text-transform: uppercase;
     color: var(--text-muted);
   }
-  .meta-icon { flex-shrink: 0; }
-
   .title-link { text-decoration: none; color: var(--text-primary); }
-  .title-link:hover .title { text-decoration: underline; text-decoration-thickness: 2px; }
+  .row:hover .title { text-decoration: underline; text-decoration-thickness: 2px; }
 
   .title {
     margin: 0;
@@ -144,6 +163,7 @@ const formatted = dateObj.toLocaleDateString('en-US', {
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.12;
+    text-wrap: balance;
   }
 
   .summary {
