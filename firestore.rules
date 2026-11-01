@@ -2,10 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // TODO: replace with your Firebase Auth UID (same value as
-    // PUBLIC_ADMIN_UID in .env) before deploying these rules.
     function isAdmin() {
-      return request.auth != null && request.auth.uid == "REPLACE_WITH_ADMIN_UID";
+      return request.auth != null && request.auth.uid == "pMSDQxNtegPcaLVtiU46fBqhGGy1";
     }
 
     match /userProfiles/{userId} {
